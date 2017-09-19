@@ -58,6 +58,16 @@ classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu', inpu
 # Add the second hidden layer to achieve a deep neural network
 classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu'))
 
+# Add the Output layer
+classifier.add(Dense(output_dim = 1, init = 'uniform', activation = 'sigmoid'))
+
+
+#Compiling the NN
+# binary_crossentropy loss function used when a binary output is expected
+classifier.compile(optimizer = 'adam', loss = 'binary_crossentropy', metrics = ['accuracy']) 
+
+
+classifier.fit(X_train, y_train, batch_size = 10, nb_epoch = 100)
 
 # Fitting classifier to the Training set
 # Create your classifier here
@@ -65,6 +75,14 @@ classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu'))
 # Predicting the Test set results
 y_pred = classifier.predict(X_test)
 
+# Create a treshold to predict a true or false for leaving the
+# the bank.
+y_pred = (y_pred > 0.5)
+
 # Making the Confusion Matrix
 from sklearn.metrics import confusion_matrix
 cm = confusion_matrix(y_test, y_pred)
+
+##  1545 + 136 correct predictions and 230 + 50 incorrect
+
+# Comput accuracy by 1545 + 136 / 2000 predictions == 0.8405 % accuracy.
