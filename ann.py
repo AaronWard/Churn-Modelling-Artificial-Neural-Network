@@ -27,8 +27,11 @@ X[:, 2] = labelencoder_X_2.fit_transform(X[:, 2])
 onehotencoder = OneHotEncoder(categorical_features = [1])
 X = onehotencoder.fit_transform(X).toarray()
 
+#Remove dummie variable
+X = X[:, 1:]
+
 # Splitting the dataset into the Training set and Test set
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
 # Feature Scaling
@@ -47,7 +50,13 @@ from keras.layers import Dense
 classifier = Sequential()
 
 # Add input layer and hidden layer no.1
-classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu', input_dim = 12))
+# 6 output nodes, Relu activation function and 11 input nodes
+# Output nodes is determined by the number of input nodes+1/2 (6)
+# the uniform method makes sure the weights are given randomly with small numbers close to 0
+classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu', input_dim = 11))
+
+# Add the second hidden layer to achieve a deep neural network
+classifier.add(Dense(output_dim = 6, init = 'uniform', activation = 'relu'))
 
 
 # Fitting classifier to the Training set
